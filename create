@@ -1,0 +1,105 @@
+#!/bin/bash
+export FTYPE="bash ruby erlang escript lisp perl php c python"
+
+# $1 -> file_type [ bash, ruby, erlang, escript, lisp, perl, php ]
+# $2 -> filename
+function create_file {
+  if [ -n "$1" ] && [ -n "$2" ]; then 
+    TP=`check_type $1`
+    create $TP $2
+  else  
+    usage
+  fi
+}
+
+# $1 -> filetype
+# $2 -> filename
+function create {
+  F="/Users/rp/code/$1/$2"
+  EXISTS=`ls $F`
+  if [ -z $EXISTS ]; then
+    create_file_content $1 $F
+    chmod +x $F
+    joe $F
+  else
+    echo "file exists use a different name than [$2]: "
+    read FN
+    create_file $1 $FN
+  fi
+}
+
+# $1 -> filetype
+# $2 -> filename
+function create_file_content {
+  if [ "$1" == "bash" ]; then
+    echo "#!/bin/bash" >> $2
+    
+  elif [ "$1" == "ruby" ]; then
+    echo "#!/usr/bin/ruby" >> $2
+    
+  elif [ "$1" == "erlang" ]; then
+    MODULE_NAME=`echo $2 | awk -F'/' '{print $NF}' | awk -F'.' '{print $1}'`
+    echo "-module($MODULE_NAME)." >> $2
+    
+  elif [ "$1" == "escript" ]; then
+    echo "#!/usr/bin/env escript" >> $2
+    echo "%% -*- erlang -*-" >> $2
+    echo "%%! -smp enable -sname nonode -mnesia debug verbose" >> $2
+    echo "main(_) ->" >> $2
+    echo "  ok." >> $2
+    
+  elif [ "$1" == "lisp" ]; then
+    echo "" > $2
+    
+  elif [ "$1" == "perl" ]; then
+    echo "#!/usr/bin/perl -w" >> $2
+    
+  elif [ "$1" == "php" ]; then
+    echo "#!/usr/bin/php" >> $2
+    
+  elif [ "$1" == "c" ]; then
+    ME=`whoami`
+    DATE=`date`
+    echo "/*Filename : $1" >> $2
+    echo "  Author   : $ME" >> $2
+    echo "  Created  : $DATE" >> $2 
+    echo "*/" >> $2
+    echo "#include <stdio.h>" >> $2
+    echo "int main(){" >> $2
+    echo "  return 0;" >> $2
+    echo "}" >> $2
+    
+  elif [ "$1" == "python" ]; then
+    echo "#!/usr/local/bin/python" >> $2
+    
+  fi
+}
+
+
+# $1 -> filetype
+function check_type {
+  CHKCMD=" grep "
+  for F in $FTYPE; do
+    CHKCMD=$CHKCMD" -e $F"
+  done
+  CMD="echo "$1" | "$CHKCMD
+  VALID=`eval $CMD`
+  if [ -z $VALID ]; then
+    echo "invalid file type $FT"
+    echo "Enter file type: "
+    read FT
+    check_type $FT
+  else
+    echo $1
+  fi
+}
+
+function usage {
+  echo "usage: ./create FILETYPE FILENAME "
+  echo "Choose a file type: "
+  for F in $FTYPE ; do
+    echo "$F"
+  done
+}
+
+create_file $1 $2
