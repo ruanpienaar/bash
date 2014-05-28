@@ -1,0 +1,48 @@
+#!/bin/bash
+
+## $1 | String, Filename Ex file.txt
+## get_extension "file.txt"
+
+function get_extension {
+  COUNT=1
+  until [ "$DONE" = "true" ]; do
+    EXTENSION=`awk_str_sep $1 "." $COUNT`    
+    CHAR_FOUND="false"      ## improve this
+    for CHAR in $EXTENSION; do
+      CHAR_FOUND="true"
+    done
+    if [ "$CHAR_FOUND" = "false" ]; then
+      DONE="true"
+    elif [ $COUNT -gt 100 ]; then
+      echo "script ran away. execution stoped !."
+      DONE="true"
+    else
+      COUNT=$[ $COUNT + 1 ]  
+    fi
+  done
+  ACTUAL_EXTENSION=`awk_str_sep $1 "." $[ $COUNT - 1]` ## improve this
+  echo $ACTUAL_EXTENSION
+}
+
+## $1 | String
+## $2 | Seperator
+## $3 | Piece Number
+## awk_str_sep "ruan.pienaar" "." 2 -> pienaar
+
+function awk_str_sep {
+  if [ -z $2 ]; then  
+    echo $1 | awk ' { print $'$2'} '
+  else 
+    echo $1 | awk -F$2 ' { print $'$3' } '
+  fi
+}
+
+function test {
+  A="folder/"
+  echo $A | awk -F\/ '{ print $2 }'
+}
+
+function get_my_ip {
+  # netstat ?
+  ## ping -c 1 -q `hostname` | awk -F'(' '{print $2}' | xargs echo | awk -F')' '{print $1}'
+}

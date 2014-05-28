@@ -1,0 +1,5 @@
+#!/bin/bash
+sudo ifconfig $1 down
+sleep 3
+sudo ifconfig $1 up
+ifconfig $1

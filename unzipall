@@ -1,0 +1,12 @@
+#!/bin/bash
+
+## build a checker for the included scripts
+source /Users/rp/Code/bash_src/common
+$FILES=`ls $1 | sort`
+for ENTRY in $FILES ; do
+  echo "Breaking . . . ."
+  EXTENSION=`get_extension $ENTRY`
+  if [ "$EXTENSION" = "zip"]; then
+    unzip $ENTRY 
+  fi
+done

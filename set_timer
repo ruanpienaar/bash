@@ -1,0 +1,12 @@
+#!/bin/bash
+
+trap handle_timer USR1
+
+set_timer() { (sleep 2; kill -USR1 $$)& }
+handle_timer() {
+  printf "%s:%s\n" "timer expired" "$(date)";
+  set_timer
+}
+        
+set_timer
+while true; do sleep 1; date; done

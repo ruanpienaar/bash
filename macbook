@@ -1,0 +1,41 @@
+#!/bin/bash
+
+function root_menu {
+  MENU_ITEM_1="Quit"
+  MENU_ITEM_2="Logged_In_Usage"
+  MENU_ITEM_3="System_profiler"
+  MENU_ITEM_4="Disk_Usage"
+  
+  MENU_ITEMS=$MENU_ITEM_1" "$MENU_ITEM_2" "$MENU_ITEM_3" "$MENU_ITEM_4
+  
+  select MENU_ITEM in $MENU_ITEMS; do
+  ## if [ "$MENU_ITEM" = "$MENU_ITEM_X" ]; then
+    if   [ "$MENU_ITEM" = "$MENU_ITEM_1" ]; then 
+      exit
+    elif [ "$MENU_ITEM" = "$MENU_ITEM_2" ]; then 
+      w
+    elif [ "$MENU_ITEM" = "$MENU_ITEM_3" ]; then
+      system_profiler_menu
+    elif [ "$MENU_ITEM" = "$MENU_ITEM_4" ]; then
+      df -h
+    fi
+  done
+}
+
+function system_profiler_menu {
+  DATATYPELIST="Back "`system_profiler -listdatatypes | grep -v "Available Datatypes:"`
+  select DATA_TYPE in $DATATYPELIST; do
+    if [ "$DATA_TYPE" = "Back" ]; then
+      root_menu
+    fi
+    system_profiler $DATA_TYPE
+  done
+}
+
+###############################################################
+## Main
+###############################################################
+
+root_menu
+
+###############################################################

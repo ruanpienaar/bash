@@ -1,0 +1,3 @@
+#!/bin/bash
+
+ping -c 1 -q `hostname` | awk -F'(' '{print $2}' | xargs echo | awk -F')' '{print $1}'

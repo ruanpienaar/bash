@@ -1,0 +1,6 @@
+#!/bin/bash
+URI="/uri/"
+NUM=$[ ( $RANDOM % 1000000 ) + 1 ] # random number from 1 to 999 999
+URL="http://127.0.0.1:8000/$URI/$NUM"
+R=`curl $URL`
+echo $R
