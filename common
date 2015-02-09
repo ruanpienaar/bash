@@ -44,5 +44,5 @@ function test {
 
 function get_my_ip {
   # netstat ?
-  ## ping -c 1 -q `hostname` | awk -F'(' '{print $2}' | xargs echo | awk -F')' '{print $1}'
+  ping -c 1 -q `hostname` | awk -F'(' '{print $2}' | xargs echo | awk -F')' '{print $1}'
 }
