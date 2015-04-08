@@ -6,8 +6,8 @@ function usage {
 }
 
 if [ -n "$1" ] && [ -n "$2" ] && [ -n "$3" ]; then
-  echo "Looking for \"$2\" in $1"
-  find $1 -name $2 -type f | xargs grep $3 --color=always
+  echo "Looking in \"$1\" for $2 files containing $3"
+  find "$1" -name "$2" -type f | xargs grep "$3" --color=always
 else  
   usage
 fi
