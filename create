@@ -65,7 +65,7 @@ function create_file_content {
     echo "  Created  : $DATE" >> $2 
     echo "*/" >> $2
     echo "#include <stdio.h>" >> $2
-    echo "int main(){" >> $2
+    echo "int main(int argc, char **argv){" >> $2
     echo "  return 0;" >> $2
     echo "}" >> $2
     
